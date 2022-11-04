@@ -205,6 +205,19 @@ export default {
 				}
 			}
 		},
+		async sendMsgRepayLoan({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const client=await initClient(rootGetters)
+				const result = await client.LoanLoan.tx.sendMsgRepayLoan({ value, fee: {amount: fee, gas: "200000"}, memo })
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgRepayLoan:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgRepayLoan:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		async sendMsgRequestLoan({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
 				const client=await initClient(rootGetters)
@@ -229,6 +242,19 @@ export default {
 					throw new Error('TxClient:MsgApproveLoan:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgApproveLoan:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgRepayLoan({ rootGetters }, { value }) {
+			try {
+				const client=initClient(rootGetters)
+				const msg = await client.LoanLoan.tx.msgRepayLoan({value})
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgRepayLoan:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgRepayLoan:Create Could not create message: ' + e.message)
 				}
 			}
 		},
