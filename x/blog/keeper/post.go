@@ -5,6 +5,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"blog/x/blog/types"
 )
 
 func (k Keeper) AppendPost(ctx sdk.Context, post types.Post) uint64 {
